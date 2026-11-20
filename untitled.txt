@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xbank | Secure Login</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 32px;
+      border-radius: 28px;
+      width: 320px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .logo-container {
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .logo-container img {
+      width: 120px;
+      height: auto;
+    }
+
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      color: #0d223f;
+      text-align: left;
+    }
+
+    p {
+      margin: 0 0 32px 0;
+      font-size: 14px;
+      color: #666;
+      text-align: left;
+      line-height: 1.4;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .input-group input[type="text"] {
+      width: 100%;
+      padding: 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 16px;
+      font-size: 16px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input[type="text"]:focus {
+      border-color: #0d223f;
+    }
+
+    .mpin-group {
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .mpin-group label {
+      display: block;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .pin-inputs {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .pin-inputs input {
+      width: 45px;
+      height: 55px;
+      text-align: center;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .pin-inputs input:focus {
+      border-color: #0d223f;
+      box-shadow: 0 0 0 3px rgba(13, 34, 63, 0.1);
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: #0d223f;
+      border: none;
+      border-radius: 16px;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.1s;
+    }
+
+    .action-btn:hover {
+      background-color: #163863;
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .resend-text {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .resend-text a {
+      color: #0d223f;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Screen Views */
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo-container">
+      <img src="IMG_20261009_170717.jpg" alt="Xbank Logo">
+    </div>
+
+    <!-- Login View -->
+    <div id="login-view" class="view active">
+      <h2>Kuzuzangpola</h2>
+      <p>Simple and secure, your smart financial solution.</p>
+      
+      <div class="input-group">
+        <label>Document ID</label>
+        <input type="text" placeholder="Enter your Document ID" inputmode="numeric">
+      </div>
+
+      <div class="mpin-group">
+        <label>MPIN</label>
+        <div class="pin-inputs" id="mpin-container">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+        </div>
+      </div>
+
+      <button class="action-btn" onclick="showOTPView()">Login</button>
+    </div>
+
+    <!-- OTP View -->
+    <div id="otp-view" class="view">
+      <h2>Verify OTP</h2>
+      <p>Please enter the verification code sent to your registered mobile number.</p>
+      
+      <div class="input-group">
+        <label>Enter 6-Digit Code</label>
+        <div class="pin-inputs" id="otp-container">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+          <input type="text" maxlength="1" inputmode="numeric">
+        </div>
+      </div>
+
+      <button class="action-btn">Verify & Continue</button>
+      
+      <div class="resend-text">
+        Didn't receive the code? <a id="timer-link" href="#">Resend (60s)</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Logic for auto-focus on pin inputs
+    function setupPinInputs(containerId) {
+      const container = document.getElementById(containerId);
+      const inputs = container.querySelectorAll('input');
+
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          const value = e.target.value;
+          e.target.value = value.replace(/[^0-9]/g, '');
+
+          if (input.value.length === 1) {
+            if (index < inputs.length - 1) {
+              inputs[index + 1].focus();
+            }
+          }
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace') {
+            if (input.value === '' && index > 0) {
+              inputs[index - 1].focus();
+            }
+          }
+        });
+      });
+    }
+
+    setupPinInputs('mpin-container');
+    setupPinInputs('otp-container');
+
+    // View Switching logic
+    function showOTPView() {
+      document.getElementById('login-view').classList.remove('active');
+      document.getElementById('otp-view').classList.add('active');
+      startTimer();
+    }
+
+    // Timer & Resend Limit logic (Max 4 times)
+    let resendCount = 0;
+    const maxResends = 4;
+    let timerId = null;
+
+    function startTimer() {
+      const timerLink = document.getElementById('timer-link');
+      let timeLeft = 60;
+      timerLink.style.pointerEvents = 'none';
+      timerLink.innerHTML = `Resend (${timeLeft}s)`;
+      
+      if (timerId) clearInterval(timerId);
+
+      timerId = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(timerId);
+          resendCount++;
+          
+          if (resendCount < maxResends) {
+            timerLink.innerHTML = `Resend (${resendCount}/${maxResends})`;
+            timerLink.style.pointerEvents = 'auto';
+          } else {
+            timerLink.innerHTML = 'Limit reached (4/4)';
+            timerLink.style.pointerEvents = 'none';
+          }
+        } else {
+          timerLink.innerHTML = `Resend (${timeLeft}s)`;
+          timeLeft--;
+        }
+      }, 1000);
+    }
+
+    document.getElementById('timer-link').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (resendCount < maxResends && this.style.pointerEvents !== 'none') {
+        startTimer();
+      }
+    });
+  </script>
+
+</body>
+</html>
